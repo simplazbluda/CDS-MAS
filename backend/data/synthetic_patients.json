@@ -1,0 +1,22 @@
+[
+  {
+    "symptoms": "fever, stiff neck, headache",
+    "label": "urgent",
+    "condition": "meningitis"
+  },
+  {
+    "symptoms": "mild cough, runny nose",
+    "label": "non-urgent",
+    "condition": "common cold"
+  },
+  {
+    "symptoms": "chest pain, shortness of breath",
+    "label": "urgent",
+    "condition": "possible cardiac issue"
+  },
+  {
+    "symptoms": "mild fever, fatigue",
+    "label": "non-urgent",
+    "condition": "viral infection"
+  }
+]
