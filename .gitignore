@@ -1,4 +1,70 @@
+# ======================
+# Python virtual environments
+# ======================
+
 venv/
+newvenv/
+.venv/
+
+
+# ======================
+# Python cache files
+# ======================
+
 __pycache__/
+*.py[cod]
 *.pyc
+
+
+# ======================
+# Environment variables
+# ======================
+
 .env
+
+
+# ======================
+# AI models and caches
+# ======================
+
+.cache/
+.huggingface/
+
+# HuggingFace downloads
+models/
+
+# Local embedding/vector databases
+chroma/
+chromadb/
+medical_db/
+
+
+# ======================
+# Database files
+# ======================
+
+*.sqlite
+*.sqlite3
+*.db
+
+
+# ======================
+# IDE settings
+# ======================
+
+.vscode/
+
+
+# ======================
+# Logs
+# ======================
+
+*.log
+
+
+# ======================
+# OS files
+# ======================
+
+.DS_Store
+Thumbs.db

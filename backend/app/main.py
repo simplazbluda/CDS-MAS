@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from backend.triage_engine import triage
-from backend.dataset import load_dataset
+from app.services.triage_engine import triage
+from app.services.dataset import load_dataset
 
 app = FastAPI(title="Clinical AI Triage System")
 
