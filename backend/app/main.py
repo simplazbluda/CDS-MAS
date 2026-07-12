@@ -1,34 +1,40 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 
-from app.services.triage_engine import triage
-from app.services.dataset import load_dataset
+from backend.app.api import (
+    health,
+    clinical,
+    patients,
+    encounters
+)
 
-app = FastAPI(title="Clinical AI Triage System")
 
-dataset = load_dataset()
+app = FastAPI(
+    title="MedicalAI Clinical Decision Support System",
+    version="0.1"
+)
 
 
-class PatientInput(BaseModel):
-    age: int
-    gender: str
-    symptoms: str
+app.include_router(
+    health.router
+)
+
+app.include_router(
+    clinical.router
+)
+
+app.include_router(
+    patients.router
+)
+
+app.include_router(
+    encounters.router
+)
 
 
 @app.get("/")
-def home():
-    return {"status": "AI triage system running"}
-
-
-@app.post("/triage")
-def triage_patient(data: PatientInput):
-    result = triage(data.symptoms, dataset)
+def root():
 
     return {
-        "patient": {
-            "age": data.age,
-            "gender": data.gender,
-            "symptoms": data.symptoms
-        },
-        "triage_result": result
+        "message":
+        "MedicalAI API running"
     }

@@ -1,18 +1,39 @@
 """
 Medical Knowledge Service
 
-Responsible for managing medical documents,
-embeddings, and retrieval from the vector database.
+Responsible for:
+
+- Managing medical documents
+- Storing embeddings
+- Retrieving relevant medical knowledge
+- Providing controlled context to KnowledgeAgent
 """
+
+
+from typing import List
 
 
 from ai.rag.vector_store import MedicalKnowledgeBase
 
 
+
+
+
 class KnowledgeService:
+
+
     """
-    Provides access to the medical knowledge base.
+    Service layer for medical knowledge retrieval.
+
+    This service ONLY handles
+    medical reference information.
+
+    It must never contain:
+    - patient data
+    - encounters
+    - clinical notes
     """
+
 
 
     def __init__(self):
@@ -21,46 +42,103 @@ class KnowledgeService:
 
 
 
+
+
     def add_medical_document(
         self,
         document_id: str,
         content: str
     ):
+
+
         """
-        Store a medical document in the knowledge base.
+        Store a medical document.
 
         Args:
+
             document_id:
-                Unique identifier for the document.
+                Unique document identifier.
 
             content:
-                Medical text content.
+                Medical reference content.
+
         """
 
+
         self.knowledge_base.add_document(
+
             document_id,
+
             content
+
         )
+
+
+
 
 
 
     def retrieve_information(
         self,
-        query: str
-    ):
+        query: str,
+        top_k: int = 3
+    ) -> List[str]:
+
+
         """
-        Retrieve relevant medical information.
+        Retrieve relevant medical references.
+
 
         Args:
+
             query:
-                Clinical question or symptom description.
+                Clinical knowledge query.
+
+
+            top_k:
+                Number of documents to retrieve.
+
 
         Returns:
-            Relevant medical documents.
+
+            List of relevant medical documents.
+
         """
 
+
+
+        if not query:
+
+
+            return [
+
+                "No clinical query provided."
+
+            ]
+
+
+
+
         results = self.knowledge_base.search(
+
             query
+
         )
 
-        return results
+
+
+        if not results:
+
+
+            return [
+
+                "No relevant medical references found."
+
+            ]
+
+
+
+
+        # Limit retrieved context
+
+        return results[:top_k]

@@ -5,6 +5,7 @@ Stores patients, encounters,
 clinical notes and AI recommendations.
 """
 
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -14,6 +15,7 @@ from sqlalchemy import (
     Text,
     Boolean,
     DateTime,
+    Date,
     ForeignKey
 )
 
@@ -30,33 +32,43 @@ class Patient(Base):
 
     __tablename__ = "patients"
 
+
     id = Column(
         Integer,
         primary_key=True,
         index=True
     )
 
+
     first_name = Column(
         String,
         nullable=False
     )
+
 
     last_name = Column(
         String,
         nullable=False
     )
 
+
     date_of_birth = Column(
-        String
+        Date,
+        nullable=True
     )
+
 
     gender = Column(
-        String
+        String,
+        nullable=True
     )
 
+
     phone = Column(
-        String
+        String,
+        nullable=True
     )
+
 
     created_at = Column(
         DateTime,
@@ -66,7 +78,8 @@ class Patient(Base):
 
     encounters = relationship(
         "Encounter",
-        back_populates="patient"
+        back_populates="patient",
+        cascade="all, delete"
     )
 
 
@@ -78,24 +91,32 @@ class Encounter(Base):
 
     __tablename__ = "encounters"
 
+
     id = Column(
         Integer,
         primary_key=True,
         index=True
     )
 
+
     patient_id = Column(
         Integer,
-        ForeignKey("patients.id")
+        ForeignKey("patients.id"),
+        nullable=False
     )
+
 
     chief_complaint = Column(
-        Text
+        Text,
+        nullable=True
     )
 
+
     symptoms = Column(
-        Text
+        Text,
+        nullable=True
     )
+
 
     created_at = Column(
         DateTime,
@@ -112,13 +133,15 @@ class Encounter(Base):
     clinical_note = relationship(
         "ClinicalNote",
         back_populates="encounter",
-        uselist=False
+        uselist=False,
+        cascade="all, delete"
     )
 
 
     recommendations = relationship(
         "AIRecommendation",
-        back_populates="encounter"
+        back_populates="encounter",
+        cascade="all, delete"
     )
 
 
@@ -130,24 +153,29 @@ class ClinicalNote(Base):
 
     __tablename__ = "clinical_notes"
 
+
     id = Column(
         Integer,
         primary_key=True
     )
 
+
     encounter_id = Column(
         Integer,
-        ForeignKey("encounters.id")
+        ForeignKey("encounters.id"),
+        nullable=False
     )
 
 
     ai_generated_note = Column(
-        Text
+        Text,
+        nullable=True
     )
 
 
     doctor_edited_note = Column(
-        Text
+        Text,
+        nullable=True
     )
 
 
@@ -186,22 +214,26 @@ class AIRecommendation(Base):
 
     encounter_id = Column(
         Integer,
-        ForeignKey("encounters.id")
+        ForeignKey("encounters.id"),
+        nullable=False
     )
 
 
     agent_name = Column(
-        String
+        String,
+        nullable=True
     )
 
 
     recommendation = Column(
-        Text
+        Text,
+        nullable=True
     )
 
 
     confidence = Column(
-        String
+        String,
+        nullable=True
     )
 
 
