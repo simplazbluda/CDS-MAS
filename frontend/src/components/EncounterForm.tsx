@@ -1,88 +1,331 @@
-import {useState} from "react";
+import { useState } from "react";
+
+import {
+    BrainCircuit,
+    LoaderCircle,
+    Activity
+} from "lucide-react";
+
 import api from "../services/api";
 
 
-interface Props{
+interface Props {
 
-    patientId:string;
+    patientId: string;
 
-    onResult:(data:any)=>void;
+    onResult: (data:any)=>void;
 
 }
 
 
-
 function EncounterForm({
+
     patientId,
+
     onResult
+
 }:Props){
 
 
-    const [symptoms,setSymptoms]=useState("");
+    const [symptoms,setSymptoms] = useState("");
+
+    const [loading,setLoading] = useState(false);
 
 
 
     async function runWorkflow(){
 
 
-        const response = await api.post(
-            "/clinical/workflow",
-            {
+        if(!symptoms.trim()){
 
-                patient_id:Number(patientId),
+            alert(
+                "Please enter patient symptoms."
+            );
 
-                symptoms:symptoms
+            return;
 
-            }
-        );
+        }
 
 
-        onResult(response.data);
+
+        try{
+
+
+            setLoading(true);
+
+
+
+            const response = await api.post(
+
+                "/clinical/workflow",
+
+                {
+
+                    patient_id:Number(patientId),
+
+                    symptoms:symptoms
+
+                }
+
+            );
+
+
+            onResult(response.data);
+
+
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+
+            alert(
+                "Unable to run clinical workflow."
+            );
+
+        }
+
+        finally{
+
+            setLoading(false);
+
+        }
 
 
     }
 
 
 
-
     return (
 
-        <div>
+        <div className="space-y-5">
 
 
-            <h2>
-                New Clinical Encounter
-            </h2>
+            {/* Symptoms Input */}
+
+            <div>
 
 
-            <textarea
+                <label
 
-                placeholder="Enter symptoms"
+                    className="
+                    flex
+                    items-center
+                    gap-2
+                    text-sm
+                    font-semibold
+                    text-slate-700
+                    mb-3
+                    "
 
-                value={symptoms}
+                >
 
-                onChange={
-                    e=>setSymptoms(e.target.value)
-                }
+                    <Activity
+                        size={18}
+                        className="text-blue-600"
+                    />
 
-            />
+                    Patient Symptoms
+
+                </label>
 
 
-            <br/>
+
+                <textarea
+
+
+                    className="
+                    w-full
+                    min-h-[160px]
+                    rounded-xl
+                    border
+                    border-slate-300
+                    bg-slate-50
+                    p-4
+                    text-slate-800
+                    placeholder:text-slate-400
+                    shadow-sm
+                    resize-none
+                    focus:outline-none
+                    focus:ring-4
+                    focus:ring-blue-100
+                    focus:border-blue-600
+                    transition
+                    "
+
+
+                    placeholder="
+Example:
+- Severe headache
+- Fever
+- Chest pain
+- Fatigue
+- Shortness of breath
+                    "
+
+
+
+                    value={symptoms}
+
+
+
+                    onChange={
+
+                        e =>
+                        setSymptoms(
+                            e.target.value
+                        )
+
+                    }
+
+
+                />
+
+            </div>
+
+
+
+
+
+            {/* Run AI Button */}
 
 
             <button
+
+
                 onClick={runWorkflow}
+
+
+                disabled={loading}
+
+
+
+                className="
+
+                w-full
+                sm:w-auto
+
+                flex
+                items-center
+                justify-center
+
+                gap-3
+
+                bg-blue-700
+
+                text-white
+
+                font-semibold
+
+                px-8
+
+                py-3
+
+                rounded-xl
+
+                shadow-md
+
+                hover:bg-blue-800
+
+                hover:shadow-lg
+
+                disabled:bg-slate-400
+
+                disabled:cursor-not-allowed
+
+                transition-all
+
+                "
+
+
             >
 
-                Run Clinical AI
+
+                {
+
+                    loading
+
+                    ?
+
+                    <>
+
+                    <LoaderCircle
+
+                        className="animate-spin"
+
+                        size={22}
+
+                    />
+
+                    Running AI Analysis...
+
+                    </>
+
+
+                    :
+
+                    <>
+
+                    <BrainCircuit
+
+                        size={22}
+
+                    />
+
+                    Run Clinical AI
+
+                    </>
+
+
+                }
+
 
             </button>
 
 
+
+            {
+
+                loading &&
+
+                <div
+
+                    className="
+                    flex
+                    items-center
+                    gap-2
+                    text-sm
+                    text-blue-600
+                    bg-blue-50
+                    rounded-lg
+                    p-3
+                    "
+
+                >
+
+                    <LoaderCircle
+
+                        className="animate-spin"
+
+                        size={16}
+
+                    />
+
+                    Clinical agents are analysing patient information...
+
+                </div>
+
+
+            }
+
+
+
         </div>
 
-    )
+    );
+
 
 }
 
