@@ -1,38 +1,42 @@
 from ai.workflows.clinical_graph import clinical_graph
 
 
-result = clinical_graph.invoke(
-    {
-        "symptoms":
-        """
-        Patient has chest pain,
-        sweating and difficulty breathing.
-        """,
 
-        "patient_information":
-        """
-        Age:45
-        Gender:Male
-        """,
-
-        "triage_result":"",
-        "knowledge_result":"",
-        "clinical_note":""
-    }
-)
+def test_ai_workflow_execution():
 
 
-print("====================")
-print("TRIAGE RESULT")
-print("====================")
+    result = clinical_graph.invoke(
 
-print(result["triage_result"])
+        {
+
+            "patient_id":1,
+
+            "encounter_id":0,
+
+            "symptoms":
+            "persistent chest pain",
+
+            "patient_information":"",
+
+            "patient_history":"",
+
+            "clinical_facts":"",
+
+            "triage_result":None,
+
+            "knowledge_result":None,
+
+            "clinical_note":None
+
+        }
+
+    )
 
 
-print("\n====================")
-print("CLINICAL NOTE")
-print("====================")
+    assert result is not None
 
-print(result["clinical_note"])
-print("\nKNOWLEDGE:")
-print(result["knowledge_result"])
+
+    assert result["triage_result"] is not None
+
+
+    assert result["clinical_note"] is not None
