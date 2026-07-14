@@ -19,8 +19,8 @@ Modular architecture
 PostgreSQL / SQLite support
 ChromaDB vector search
 3. System Architecture
-
-documentation/images/system_architecture_diagram
+reports/system_architecture_diagram
+docs/images/system_architecture_diagram
 
 4. Technology Stack
 Component	Technology
@@ -59,7 +59,7 @@ CDS-MAS/
 │
 ├
 │
-├── documentation/
+├── docs/
 │
 └── README.md
 
@@ -162,9 +162,9 @@ Generated using
 pdoc
 
 Documentation
-
-documentation/ai
-documentation/index
+Visit the folder: 
+docs/ai
+docs/index
 
 14. Database Schema
 
